@@ -18,7 +18,7 @@ public enum AccessLevel: String, Codable {
 /// Configuration options to influence the generation and visual representation of the class diagram
 public struct Configuration: Codable {
     /// memberwise initializer
-    public init(files: FileOptions = FileOptions(), elements: ElementOptions = ElementOptions(), hideShowCommands: [String]? = ["hide empty members"], skinparamCommands: [String]? = ["skinparam shadowing false"], includeRemoteURL: String? = nil, theme: Theme? = nil, relationships: RelationshipOptions = RelationshipOptions(), stereotypes: Stereotypes = Stereotypes.default, relationshipExclude _: [String]? = nil) {
+    public init(files: FileOptions = FileOptions(), elements: ElementOptions = ElementOptions(), hideShowCommands: [String]? = ["hide empty members"], skinparamCommands: [String]? = ["skinparam shadowing false"], includeRemoteURL: String? = nil, theme: Theme? = nil, rectangles: [RectangleOptions]? = nil, relationships: RelationshipOptions = RelationshipOptions(), stereotypes: Stereotypes = Stereotypes.default, relationshipExclude _: [String]? = nil) {
         self.files = files
         self.elements = elements
         self.hideShowCommands = hideShowCommands
@@ -52,6 +52,9 @@ public struct Configuration: Codable {
         if let relationships = try container.decodeIfPresent(RelationshipOptions.self, forKey: .relationships) {
             self.relationships = relationships
         }
+        if let rectangles = try container.decodeIfPresent([RectangleOptions].self, forKey: .rectangles) {
+            self.rectangles = rectangles
+        }
         if let stereotypes = try container.decodeIfPresent(Stereotypes.self, forKey: .stereotypes) {
             self.stereotypes = stereotypes
         }
@@ -79,6 +82,9 @@ public struct Configuration: Codable {
 
     /// options which relationships to show and how to style them
     public var relationships = RelationshipOptions()
+
+    /// options which relationships to show and how to style them
+    public var rectangles: [RectangleOptions]?
 
     /// sterotypes (spotted character with background color and optional name) to be shown for an entity type
     public private(set) var stereotypes = Stereotypes(classStereotype: Stereotype.class, structStereotype: Stereotype.struct, extensionStereotype: Stereotype.extension, enumStereotype: Stereotype.enum, protocolStereotype: Stereotype.protocol)
