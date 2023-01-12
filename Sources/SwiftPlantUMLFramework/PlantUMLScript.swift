@@ -23,6 +23,9 @@ public struct PlantUMLScript {
             text.appendAsNewLine("!include \(includeRemoteURL)")
         }
         text.appendAsNewLine(defaultStyling)
+        if let title = configuration.title {
+            text.appendAsNewLine("title \(title)")
+        }
 
         let newLine = "\n"
         var mainContent = newLine

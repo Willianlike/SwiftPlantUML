@@ -18,7 +18,7 @@ public enum AccessLevel: String, Codable {
 /// Configuration options to influence the generation and visual representation of the class diagram
 public struct Configuration: Codable {
     /// memberwise initializer
-    public init(files: FileOptions = FileOptions(), elements: ElementOptions = ElementOptions(), hideShowCommands: [String]? = ["hide empty members"], skinparamCommands: [String]? = ["skinparam shadowing false"], includeRemoteURL: String? = nil, theme: Theme? = nil, rectangles: [RectangleOptions]? = nil, relationships: RelationshipOptions = RelationshipOptions(), stereotypes: Stereotypes = Stereotypes.default, relationshipExclude _: [String]? = nil) {
+    public init(title: String? = nil, files: FileOptions = FileOptions(), elements: ElementOptions = ElementOptions(), hideShowCommands: [String]? = ["hide empty members"], skinparamCommands: [String]? = ["skinparam shadowing false"], includeRemoteURL: String? = nil, theme: Theme? = nil, rectangles: [RectangleOptions]? = nil, relationships: RelationshipOptions = RelationshipOptions(), stereotypes: Stereotypes = Stereotypes.default, relationshipExclude _: [String]? = nil) {
         self.files = files
         self.elements = elements
         self.hideShowCommands = hideShowCommands
@@ -31,6 +31,9 @@ public struct Configuration: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        if let title = try container.decodeIfPresent(String.self, forKey: .title) {
+            self.title = title
+        }
         if let files = try container.decodeIfPresent(FileOptions.self, forKey: .files) {
             self.files = files
         }
@@ -62,6 +65,8 @@ public struct Configuration: Codable {
 
     /// default configuration used if no configuration file was found
     public static let `default` = Configuration()
+
+    public var title: String?
 
     /// options which files shall be considered for class diagram generation
     public var files = FileOptions()
